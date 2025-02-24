@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-
 from dotenv.main import load_dotenv
 
 load_dotenv(override=True)
@@ -38,7 +37,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = ''
+ROOT_URLCONF = 'django_drf_hw.urls'
 
 TEMPLATES = [
     {
