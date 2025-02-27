@@ -23,8 +23,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'users',
     'lms',
-
-
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -37,7 +36,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'django_drf_hw.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
