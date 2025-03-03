@@ -1,12 +1,7 @@
 from django.contrib.auth import get_user_model
 from django_filters.rest_framework import DjangoFilterBackend, filters
 from rest_framework import viewsets, generics, permissions
-from rest_framework.permissions import IsAuthenticated
-
-from lms.models import Course, Lesson
-from lms.serializers import CourseSerializer, LessonSerializer
 from users.models import CustomUser
-from users.permissions import IsModerator
 from users.serializers import UserSerializer, PaymentSerializer, RegisterSerializer
 
 User = get_user_model()  # получает пользовательскую модель

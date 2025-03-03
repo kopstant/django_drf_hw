@@ -26,7 +26,6 @@ class IsOwner(permissions.BasePermission):
 
 class IsModeratorOrOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        """
-        Проверяем, является ли пользователь модератором или владельцем объекта
-        """
-        return IsModerator().has_permission(request, view) or IsOwner().has_object_permission(request, view, obj)
+        if IsModerator().has_permission(request, view):
+            return view.action in ['list', 'retrieve', 'update', 'partial_update']
+        return obj.owner == request.user
