@@ -2,13 +2,6 @@ from rest_framework import permissions
 
 
 class IsModerator(permissions.BasePermission):
-    def has_permission(self, request, view):
-        """
-        Проверяет принадлежит ли пользователь группе "moderator"
-        Если пользователь в группе модератов, он получается доступ к View.(CourseView or LessonViewSet).
-        """
-        return request.user.groups.filter(name='moderator').exists()
-
     def has_object_permission(self, request, view, obj):
         """
         Проверяет доступ к конкретному объекту.
@@ -26,6 +19,12 @@ class IsOwner(permissions.BasePermission):
 
 class IsModeratorOrOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        if IsModerator().has_permission(request, view):
-            return view.action in ['list', 'retrieve', 'update', 'partial_update']
+        """
+        Модераторы могут видеть и редактировать все объекты,
+        а владельцы могут работать только с собственными объектами.
+        """
+        # Модераторы могут видеть и редактировать все объекты
+        if request.user.groups.filter(name='moderator').exists():
+            return True
+        # Обычные пользователи могут видеть и редактировать только свои объекты
         return obj.owner == request.user

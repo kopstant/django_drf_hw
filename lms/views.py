@@ -1,5 +1,5 @@
 from rest_framework import viewsets, generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from users.permissions import IsModeratorOrOwner, IsOwner
 from .models import Lesson, Course
@@ -31,7 +31,6 @@ class LessonViewSet(viewsets.ModelViewSet):
     """
     Управляет уроками.
     Модель LessonView.
-
     """
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
@@ -39,10 +38,13 @@ class LessonViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         """
-        Определяет права доступа применяются в зависимости от выполняемого действия.
+        Определяет права доступа, которые применяются в зависимости от выполняемого действия.
         """
+        if self.action in ['list', 'retrieve']:
+            return [AllowAny()]  # Доступ на просмотр уроков для всех пользователей.
         if self.action in ['create', 'destroy']:
             return [IsAuthenticated(), IsOwner()]  # Только владельцы могут создавать и удалять
+        # Для остальных действий (обновление) доступ ограничен правами владельца или модератора
         return [IsAuthenticated(), IsModeratorOrOwner()]
 
 
