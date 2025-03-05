@@ -1,0 +1,18 @@
+[
+  {
+    "model": "users.customuser",
+    "pk": 1,
+    "fields": {
+      "username": "testuser",
+      "email": "test@example.com"
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 2,
+    "fields": {
+      "username": "usertest",
+      "email": "test@mail.com"
+    }
+  }
+]

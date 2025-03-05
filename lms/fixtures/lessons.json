@@ -1,0 +1,18 @@
+[
+  {
+    "model": "lms.lesson",
+    "pk": 1,
+    "fields": {
+      "title": "Урок 1",
+      "course": 1
+    }
+  },
+  {
+    "model": "lms.lesson",
+    "pk": 2,
+    "fields": {
+      "title": "Урок 2",
+      "course": 1
+    }
+  }
+]
