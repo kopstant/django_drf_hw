@@ -1,5 +1,5 @@
 from rest_framework import viewsets, generics
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 
 from users.permissions import IsModeratorOrOwner, IsOwner
 from .models import Lesson, Course
@@ -27,30 +27,9 @@ class CourseViewSet(viewsets.ModelViewSet):
         return [IsAuthenticated(), IsModeratorOrOwner()]
 
 
-class LessonViewSet(viewsets.ModelViewSet):
-    """
-    Управляет уроками.
-    Модель LessonView.
-    """
-    queryset = Lesson.objects.all()
-    serializer_class = LessonSerializer
-    permission_classes = [IsAuthenticated, IsModeratorOrOwner]
-
-    def get_permissions(self):
-        """
-        Определяет права доступа, которые применяются в зависимости от выполняемого действия.
-        """
-        if self.action in ['list', 'retrieve']:
-            return [AllowAny()]  # Доступ на просмотр уроков для всех пользователей.
-        if self.action in ['create', 'destroy']:
-            return [IsAuthenticated(), IsOwner()]  # Только владельцы могут создавать и удалять
-        # Для остальных действий (обновление) доступ ограничен правами владельца или модератора
-        return [IsAuthenticated(), IsModeratorOrOwner()]
-
-
 class LessonCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonSerializer
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated, IsOwner]  # Только владельцы могут создавать
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -59,13 +38,13 @@ class LessonCreateAPIView(generics.CreateAPIView):
 class LessonListAPIView(generics.ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]  # Авторизованные пользователи могут просматривать
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsModeratorOrOwner]
 
 
 class LessonUpdateAPIView(generics.UpdateAPIView):
@@ -76,4 +55,4 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
 
 class LessonDeleteAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated, IsOwner]  # Только владельцы могут удалять
