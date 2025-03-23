@@ -19,12 +19,4 @@ class IsOwner(permissions.BasePermission):
 
 class IsModeratorOrOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        """
-        Модераторы могут видеть и редактировать все объекты,
-        а владельцы могут работать только с собственными объектами.
-        """
-        # Модераторы могут видеть и редактировать все объекты
-        if request.user.groups.filter(name='moderator').exists():
-            return True
-        # Обычные пользователи могут видеть и редактировать только свои объекты
-        return obj.owner == request.user
+        return request.user.is_staff or obj.owner == request.user

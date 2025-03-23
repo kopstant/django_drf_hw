@@ -1,11 +1,17 @@
 from rest_framework import serializers
 from .models import Course, Lesson
+from .validators import VideoUrlValidator
+from users.models import SubscriptionForCourse, CustomUser
 
 
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = "__all__"
+
+        validators = [
+            VideoUrlValidator(field='video_url'),
+        ]
 
 
 class LessonDetailSerializer(serializers.ModelSerializer):
@@ -17,6 +23,7 @@ class LessonDetailSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     lessons = LessonSerializer(many=True, read_only=True)
     lessons_count = serializers.SerializerMethodField()
+    subscriptions = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
@@ -24,3 +31,12 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_lessons_count(self, obj):
         return obj.lessons.count()
+
+    def get_count_subscriptions(self, obj):
+        return f'Подписок: {obj.subscriptions.count()}'
+
+    def get_subscribtions(self, obj):
+        user = self.context['request'].user
+        if SubscriptionForCourse.objects.all().filter(user=CustomUser, course=obj).exists():
+            return 'У вас есть подписка на данный курс.'
+        return 'У вас нет подписки на данный курс'

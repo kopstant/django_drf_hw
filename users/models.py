@@ -29,3 +29,18 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.amount} ({self.payment_method})"
+
+
+class SubscriptionForCourse(models.Model):
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Пользователь')
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True,
+                               verbose_name='Подписка на курс')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.owner} - {self.course} - {self.created_at}"
+
+    class Meta:
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
+        ordering = ['created_at', 'owner', 'course']
