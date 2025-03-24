@@ -7,7 +7,7 @@ User = settings.AUTH_USER_MODEL
 class Course(models.Model):
     title = models.CharField(max_length=255)
     preview = models.ImageField(upload_to='courses/', blank=True, null=True)
-    description = models.TextField()
+    description = models.TextField(max_length=255, blank=True, null=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='courses', blank=True,
                               null=True)
 

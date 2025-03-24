@@ -16,6 +16,8 @@ django-filter = "^25.1"
 djangorestframework-simplejwt = "^5.5.0"
 pytest-cov = "^6.0.0"
 coverage = "^7.7.1"
+drf-yasg = "^1.21.10"
+stripe = "^11.6.0"
 
 
 [build-system]
