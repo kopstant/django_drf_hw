@@ -119,8 +119,6 @@ class SubscriptionForCourse(models.Model):
                                verbose_name='Подписка на курс')
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # stripe
-
     def __str__(self):
         return f"{self.owner} - {self.course} - {self.created_at}"
 

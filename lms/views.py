@@ -1,11 +1,10 @@
-from django.utils.decorators import method_decorator
-from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, generics
 from rest_framework.exceptions import PermissionDenied, NotFound
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from lms.tasks import send_course_update_mail
 
 from users.permissions import IsModeratorOrOwner, IsOwner
 from .models import Lesson, Course
@@ -34,6 +33,14 @@ class CourseViewSet(viewsets.ModelViewSet):
             permission_classes = [IsAuthenticated, IsModeratorOrOwner]
 
         return [permission() for permission in permission_classes]
+
+    def perform_update(self, serializer):
+        """
+        Обновление курса и отправка уведомления всем подписанным пользователям.
+        """
+        course = serializer.save()
+        # Отправляем уведомление подписчикам (асинхронно)
+        send_course_update_mail.delay(course.id)  # Вызываем задачу
 
 
 class CourseSubscriptionViewSet(APIView):

@@ -18,6 +18,11 @@ pytest-cov = "^6.0.0"
 coverage = "^7.7.1"
 drf-yasg = "^1.21.10"
 stripe = "^11.6.0"
+celery = "^5.4.0"
+eventlet = "^0.39.1"
+redis = "^5.2.1"
+django-celery-beat = "^2.7.0"
+django-redis = "^5.4.0"
 
 
 [build-system]

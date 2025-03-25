@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Course, Lesson
 from .validators import VideoUrlValidator
-from users.models import SubscriptionForCourse, CustomUser
+from users.models import SubscriptionForCourse
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -35,8 +35,8 @@ class CourseSerializer(serializers.ModelSerializer):
     def get_count_subscriptions(self, obj):
         return f'Подписок: {obj.subscriptions.count()}'
 
-    def get_subscribtions(self, obj):
+    def get_subscriptions(self, obj):
         user = self.context['request'].user
-        if SubscriptionForCourse.objects.all().filter(user=CustomUser, course=obj).exists():
+        if SubscriptionForCourse.objects.filter(owner=user, course=obj).exists():
             return 'У вас есть подписка на данный курс.'
         return 'У вас нет подписки на данный курс'
