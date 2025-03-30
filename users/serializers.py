@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from users.models import Payment
 from users.models import CustomUser
 from django.contrib.auth import get_user_model
@@ -10,6 +11,12 @@ class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         fields = '__all__'
+
+    def validate(self, data):
+        """Проверяем, что указан либо курс, либо урок"""
+        if not data.get('course') and not data.get('lesson'):
+            raise serializers.ValidationError("Необходимо указать курс или урок")
+        return data
 
 
 class UserSerializer(serializers.ModelSerializer):
