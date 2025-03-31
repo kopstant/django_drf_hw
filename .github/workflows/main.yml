@@ -46,12 +46,16 @@ jobs:
 
     - name: Check code formatting
       run: |
-        black . --check
+        poetry run black . --check
     
     - name: Run linter
       run: |
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Check import sorting
+      run: |
+        poetry run isort . --check-only
 
     - name: Build and start containers
       run: |
