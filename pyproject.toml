@@ -2,7 +2,7 @@
 name = "django-drf-hw"
 version = "0.1.0"
 description = "Django DRF Homework"
-authors = ["Your Name <your.email@example.com>"]
+authors = ["kopstant"]
 readme = "README.md"
 packages = [
     { include = "config" },
