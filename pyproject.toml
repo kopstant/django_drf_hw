@@ -8,8 +8,6 @@ packages = [
     { include = "config" },
     { include = "lms" },
     { include = "users" },
-    { include = "subscriptions" },
-    { include = "payments" },
 ]
 
 [tool.poetry.dependencies]
