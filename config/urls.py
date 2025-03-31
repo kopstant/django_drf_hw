@@ -1,11 +1,11 @@
 from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
 
 # Импорты для корректной работы drf-yasg
 from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
 
 #  Схема документации из drf-yasg
 schema_view = get_schema_view(

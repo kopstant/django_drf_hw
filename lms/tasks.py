@@ -1,14 +1,14 @@
+import logging
 import os
 from datetime import timedelta, timezone
 
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail
-import logging
-
-from lms.models import Course
-from users.models import SubscriptionForCourse, CustomUser
 from celery import shared_task
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
+
+from lms.models import Course
+from users.models import CustomUser, SubscriptionForCourse
 
 logger = logging.getLogger(__name__)
 

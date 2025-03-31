@@ -1,8 +1,7 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from users.models import Payment
-from users.models import CustomUser
-from django.contrib.auth import get_user_model
+from users.models import CustomUser, Payment
 
 User = get_user_model()  # получает пользовательскую модель
 

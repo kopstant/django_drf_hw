@@ -1,15 +1,15 @@
-from rest_framework import viewsets, generics
-from rest_framework.exceptions import PermissionDenied, NotFound
+from rest_framework import generics, status, viewsets
+from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
-from lms.tasks import send_course_update_mail
 
-from users.permissions import IsModeratorOrOwner, IsOwner
-from .models import Lesson, Course
+from lms.tasks import send_course_update_mail
 from users.models import SubscriptionForCourse
-from .serializers import LessonSerializer, CourseSerializer
+from users.permissions import IsModeratorOrOwner, IsOwner
+
+from .models import Course, Lesson
+from .serializers import CourseSerializer, LessonSerializer
 
 
 class CourseViewSet(viewsets.ModelViewSet):

@@ -3,18 +3,18 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, generics, permissions, status
+from rest_framework import generics, permissions, status, viewsets
+from rest_framework.filters import OrderingFilter
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from lms.models import Lesson, Course
+from lms.models import Course, Lesson
 from lms.paginators import CustomPaginator
 from lms.serializers import LessonSerializer
 from users.models import CustomUser, Payment
-from users.serializers import UserSerializer, PaymentSerializer, RegisterSerializer
-from rest_framework.filters import OrderingFilter
+from users.serializers import PaymentSerializer, RegisterSerializer, UserSerializer
 
 User = get_user_model()  # получает пользовательскую модель
 stripe.api_key = settings.STRIPE_API_KEY

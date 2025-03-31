@@ -1,8 +1,10 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 from lms.apps import LmsConfig
-from .views import PaymentViewSet, RegisterView, CustomUserViewSet, PaymentCreateAPIView, PaymentSuccessView, PaymentCancelView
+
+from .views import CustomUserViewSet, PaymentCancelView, PaymentCreateAPIView, PaymentSuccessView, PaymentViewSet, RegisterView
 
 app_name = LmsConfig.name
 router = DefaultRouter()
