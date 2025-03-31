@@ -6,32 +6,34 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0004_payment_status_alter_payment_user'),
+        ("users", "0004_payment_status_alter_payment_user"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='payment',
-            name='status',
+            model_name="payment",
+            name="status",
         ),
         migrations.AddField(
-            model_name='payment',
-            name='is_paid',
-            field=models.BooleanField(default=False, verbose_name='Оплачено'),
+            model_name="payment",
+            name="is_paid",
+            field=models.BooleanField(default=False, verbose_name="Оплачено"),
         ),
         migrations.AddField(
-            model_name='payment',
-            name='stripe_price_id',
+            model_name="payment",
+            name="stripe_price_id",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='payment',
-            name='stripe_product_id',
+            model_name="payment",
+            name="stripe_product_id",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='payment_method',
-            field=models.CharField(choices=[('cash', 'Наличные'), ('transfer', 'Перевод на счет'), ('stripe', 'Stripe')], max_length=10),
+            model_name="payment",
+            name="payment_method",
+            field=models.CharField(
+                choices=[("cash", "Наличные"), ("transfer", "Перевод на счет"), ("stripe", "Stripe")], max_length=10
+            ),
         ),
     ]

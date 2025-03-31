@@ -3,18 +3,18 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, generics, permissions, status
+from rest_framework import generics, permissions, status, viewsets
+from rest_framework.filters import OrderingFilter
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from lms.models import Lesson, Course
+from lms.models import Course, Lesson
 from lms.paginators import CustomPaginator
 from lms.serializers import LessonSerializer
 from users.models import CustomUser, Payment
-from users.serializers import UserSerializer, PaymentSerializer, RegisterSerializer
-from rest_framework.filters import OrderingFilter
+from users.serializers import PaymentSerializer, RegisterSerializer, UserSerializer
 
 User = get_user_model()  # получает пользовательскую модель
 stripe.api_key = settings.STRIPE_API_KEY
@@ -26,6 +26,7 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     Модель CustomUser.
     Позволяет создавать, изменять, удалять и просматривать пользователей.
     """
+
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [
@@ -37,23 +38,25 @@ class PaymentViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_fields = ['payment_method']
-    ordering_fields = ['date']
-    ordering = ['-date']  # По умолчанию сортировка от новых к старым
+    filterset_fields = ["payment_method"]
+    ordering_fields = ["date"]
+    ordering = ["-date"]  # По умолчанию сортировка от новых к старым
 
 
 class UserListCreateView(generics.ListCreateAPIView):  # Позволяет просматривать список пользователей и создавать нового
     queryset = User.objects.all()  # выбрать всех пользователей из БД.
     serializer_class = UserSerializer  # преобразует данные при помощи UserSerializer
     permission_classes = [
-        permissions.IsAuthenticated]  # Настройка прав доступа. Доступ только для аутентифицированных пользователей.
+        permissions.IsAuthenticated
+    ]  # Настройка прав доступа. Доступ только для аутентифицированных пользователей.
 
 
 class UserRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):  # GET, PUT/PATCH, DELETE
     queryset = User.objects.all()  # выбрать всех пользователей из БД.
     serializer_class = UserSerializer  # преобразует данные при помощи UserSerializer
     permission_classes = [
-        permissions.IsAuthenticated]  # Настройка прав доступа. Доступ только для аутентифицированных пользователей.
+        permissions.IsAuthenticated
+    ]  # Настройка прав доступа. Доступ только для аутентифицированных пользователей.
 
 
 class RegisterView(generics.CreateAPIView):  # Позволяет создавать нового пользователя (зарегистрировать) POST
@@ -87,14 +90,13 @@ class PaymentCreateAPIView(CreateAPIView):
                 payment.session_id = payment_id
                 payment.link = payment_link
                 payment.save()
-                return Response({
-                    'payment_id': payment_id,
-                    'payment_link': payment_link,
-                    'status': 'created'
-                }, status=status.HTTP_201_CREATED)
+                return Response(
+                    {"payment_id": payment_id, "payment_link": payment_link, "status": "created"},
+                    status=status.HTTP_201_CREATED,
+                )
             except ValueError as e:
                 payment.delete()
-                return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -109,19 +111,19 @@ class PaymentSuccessView(APIView):
         try:
             session = stripe.checkout.Session.retrieve(payment.session_id)
 
-            if session.payment_status == 'paid':
+            if session.payment_status == "paid":
                 payment.is_paid = True
                 payment.save()
-                return Response({'status': 'success', 'message': 'Платеж успешно завершен'})
+                return Response({"status": "success", "message": "Платеж успешно завершен"})
             else:
-                return Response({'status': 'pending', 'message': 'Ожидается оплата'})
+                return Response({"status": "pending", "message": "Ожидается оплата"})
 
         except stripe.error.StripeError as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PaymentCancelView(APIView):
     """View для обработки отмены оплаты"""
 
     def get(self, request, pk, *args, **kwargs):
-        return Response({'status': 'canceled', 'message': 'Оплата отменена'})
+        return Response({"status": "canceled", "message": "Оплата отменена"})

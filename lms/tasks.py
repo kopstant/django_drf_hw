@@ -1,14 +1,14 @@
+import logging
 import os
 from datetime import timedelta, timezone
 
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail
-import logging
-
-from lms.models import Course
-from users.models import SubscriptionForCourse, CustomUser
 from celery import shared_task
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
+
+from lms.models import Course
+from users.models import CustomUser, SubscriptionForCourse
 
 logger = logging.getLogger(__name__)
 
@@ -32,9 +32,9 @@ def send_course_update_mail(course_id):
 
     # Отправляем письмо всем подписчикам
     send_mail(
-        subject='Курс обновлен!',
-        message=f'Курс с ID {course_id} был обновлен. Проверьте его обновления!',
-        from_email=os.getenv('EMAIL_HOST_USER'),
+        subject="Курс обновлен!",
+        message=f"Курс с ID {course_id} был обновлен. Проверьте его обновления!",
+        from_email=os.getenv("EMAIL_HOST_USER"),
         recipient_list=recipient_email,
     )
 
@@ -48,11 +48,8 @@ def deactivate_inactive_users():
     one_month_ago = timezone.now() - timedelta(days=30)
 
     # Находим пользователей, которые не заходили более месяца и еще активны.
-    inactive_users = CustomUser.objects.filter(
-        last_login__it=one_month_ago,
-        is_active=True
-    )
+    inactive_users = CustomUser.objects.filter(last_login__it=one_month_ago, is_active=True)
 
     count = inactive_users.update(is_active=False)
 
-    return f'Деактивировано {count} неактивных пользователей'
+    return f"Деактивировано {count} неактивных пользователей"

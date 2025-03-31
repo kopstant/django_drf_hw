@@ -44,7 +44,45 @@ jobs:
     - name: Wait for PostgreSQL
       run: sleep 5
 
-    - name: Run Tests
+    - name: Check code formatting
+      run: |
+        poetry run black . --check
+    
+    - name: Run linter
+      run: |
+        poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Check import sorting
+      run: |
+        poetry run isort . --check-only
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Create .env file
+      run: |
+        cat > .env << EOL
+        POSTGRES_DB=django_drf_hw
+        POSTGRES_USER=postgres
+        POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }}
+        POSTGRES_HOST=localhost
+        POSTGRES_PORT=5432
+        SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
+        DEBUG=True
+        ALLOWED_HOSTS=localhost,127.0.0.1
+        REDIS_HOST=redis
+        REDIS_PORT=6379
+        STRIPE_PUBLIC_KEY=${{ secrets.STRIPE_PUBLIC_KEY }}
+        STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
+        EOL
+
+    - name: Build and start containers
+      run: |
+        docker compose build
+        docker compose up -d
+
+    - name: Run tests
       env:
         POSTGRES_NAME: django_drf_hw
         POSTGRES_USER: postgres
@@ -55,6 +93,9 @@ jobs:
         DEBUG: "True"
       run: |
         poetry run python manage.py test
+
+    - name: Stop containers
+      run: docker compose down
 
   deploy:
     needs: test
@@ -71,5 +112,5 @@ jobs:
         script: |
           cd /var/www/django_drf_hw
           git pull origin main
-          docker-compose down
-          docker-compose up -d --build 
+          docker compose down
+          docker compose up -d --build 

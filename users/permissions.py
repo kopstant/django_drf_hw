@@ -6,7 +6,7 @@ class IsModerator(permissions.BasePermission):
         """
         Проверяет доступ к конкретному объекту.
         """
-        return request.user.groups.filter(name='moderator').exists()
+        return request.user.groups.filter(name="moderator").exists()
 
 
 class IsOwner(permissions.BasePermission):

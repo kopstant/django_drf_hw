@@ -8,32 +8,43 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0002_subscriptionforcourse'),
+        ("users", "0002_subscriptionforcourse"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='payment',
-            options={'verbose_name': 'Платеж', 'verbose_name_plural': 'Платежи'},
+            name="payment",
+            options={"verbose_name": "Платеж", "verbose_name_plural": "Платежи"},
         ),
         migrations.AddField(
-            model_name='payment',
-            name='link',
-            field=models.URLField(blank=True, help_text='Укажите ссылку на оплату', max_length=400, null=True, verbose_name='Ссылка на оплату'),
+            model_name="payment",
+            name="link",
+            field=models.URLField(
+                blank=True, help_text="Укажите ссылку на оплату", max_length=400, null=True, verbose_name="Ссылка на оплату"
+            ),
         ),
         migrations.AddField(
-            model_name='payment',
-            name='session_id',
-            field=models.CharField(blank=True, help_text='Укажите ID сессии', max_length=255, null=True, verbose_name='ID сессии'),
+            model_name="payment",
+            name="session_id",
+            field=models.CharField(
+                blank=True, help_text="Укажите ID сессии", max_length=255, null=True, verbose_name="ID сессии"
+            ),
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='amount',
-            field=models.PositiveIntegerField(help_text='Укажите сумму платежа', verbose_name='Сумма платежа'),
+            model_name="payment",
+            name="amount",
+            field=models.PositiveIntegerField(help_text="Укажите сумму платежа", verbose_name="Сумма платежа"),
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='user',
-            field=models.ForeignKey(blank=True, help_text='Укажите пользователя', null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Пользователь'),
+            model_name="payment",
+            name="user",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="Укажите пользователя",
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="Пользователь",
+            ),
         ),
     ]
