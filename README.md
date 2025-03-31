@@ -1,5 +1,47 @@
 # Django DRF Project Deployment Guide
 
+## Информация о сервере
+- **IP**: 158.160.172.203
+- **Провайдер**: Yandex.Cloud
+- **Статус**: Активен
+- **Порт**: 8000
+
+## Настройка Nginx
+```bash
+# Установка Nginx
+sudo apt install nginx
+
+# Создание конфигурации
+sudo nano /etc/nginx/sites-available/django_drf_hw
+```
+
+Вставьте следующую конфигурацию:
+```nginx
+server {
+    listen 80;
+    server_name 158.160.172.203;
+
+    location / {
+        proxy_pass http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /static/ {
+        alias /var/www/django_drf_hw/static/;
+    }
+}
+```
+
+```bash
+# Активация конфигурации
+sudo ln -s /etc/nginx/sites-available/django_drf_hw /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
 ## Содержание
 1. [Настройка сервера](#настройка-сервера)
 2. [Настройка проекта](#настройка-проекта)
@@ -210,3 +252,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app/
 
 CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
+```

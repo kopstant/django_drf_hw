@@ -23,6 +23,8 @@ eventlet = "^0.39.1"
 redis = "^5.2.1"
 django-celery-beat = "^2.7.0"
 django-redis = "^5.4.0"
+gunicorn = "^21.2.0"
+whitenoise = "^6.9.0"
 
 
 [build-system]
