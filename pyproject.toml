@@ -1,31 +1,40 @@
 [tool.poetry]
 name = "django-drf-hw"
 version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "Django DRF Homework"
+authors = ["Your Name <your.email@example.com>"]
 readme = "README.md"
+packages = [
+    { include = "config" },
+    { include = "courses" },
+    { include = "users" },
+    { include = "subscriptions" },
+    { include = "payments" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.12"
 django = "^5.1.6"
 djangorestframework = "^3.15.2"
-pillow = "^11.1.0"
-python-dotenv = "^1.0.1"
 psycopg2-binary = "^2.9.10"
-django-filter = "^25.1"
-djangorestframework-simplejwt = "^5.5.0"
-pytest-cov = "^6.0.0"
-coverage = "^7.7.1"
-drf-yasg = "^1.21.10"
-stripe = "^11.6.0"
+python-dotenv = "^1.0.1"
 celery = "^5.4.0"
-eventlet = "^0.39.1"
 redis = "^5.2.1"
 django-celery-beat = "^2.7.0"
+django-filter = "^25.1"
 django-redis = "^5.4.0"
+djangorestframework-simplejwt = "^5.5.0"
+drf-yasg = "^1.21.10"
 gunicorn = "^21.2.0"
 whitenoise = "^6.9.0"
+stripe = "^11.6.0"
+Pillow = "^11.1.0"
+django-timezone-field = "^7.1"
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+pytest-cov = "^6.0.0"
+coverage = "^7.7.1"
 
 [build-system]
 requires = ["poetry-core"]
