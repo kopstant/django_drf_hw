@@ -14,9 +14,9 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_DB: django_db
-          POSTGRES_USER: django_user
-          POSTGRES_PASSWORD: django_password
+          POSTGRES_DB: django_drf_hw
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}  # Используем секрет
         ports:
           - 5432:5432
         options: >-
