@@ -10,13 +10,24 @@ services:
       - .:/lms
       - static_volume:/lms/staticfiles
       - media_volume:/lms/media
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     env_file:
       - .env
     depends_on:
       - db
       - redis
+
+  nginx:
+    image: nginx:1.25
+    volumes:
+      - static_volume:/lms/staticfiles
+      - media_volume:/lms/media
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - web
 
   db:
     image: postgres:15
