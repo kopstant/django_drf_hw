@@ -19,6 +19,7 @@ class CourseViewSet(viewsets.ModelViewSet):
     Контролирует доступ к курсам, разрешает модераторам просматривать и редактировать их, но не удалять и создавать.
     Is_moderator - кастомное разрешение.
     """
+
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     permission_classes = [IsAuthenticated, IsOwner]
@@ -27,7 +28,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         """
         Определяет права доступа применяются в зависимости от выполняемого действия.
         """
-        if self.action in ['create', 'destroy']:
+        if self.action in ["create", "destroy"]:
             permission_classes = [IsAuthenticated, IsOwner]  # Только владельцы могут создавать и удалять
         else:
             permission_classes = [IsAuthenticated, IsModeratorOrOwner]
@@ -48,25 +49,25 @@ class CourseSubscriptionViewSet(APIView):
 
     def post(self, request, *args, **kwargs):
         user = request.user
-        course_id = request.data.get('course_id')
+        course_id = request.data.get("course_id")
 
         if not course_id:
-            return Response({'error': 'Не указан id курса.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Не указан id курса."}, status=status.HTTP_400_BAD_REQUEST)
         try:
             course = Course.objects.get(pk=course_id)
         except Course.DoesNotExist:
-            return Response({'error': 'Course does not find.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Course does not find."}, status=status.HTTP_404_NOT_FOUND)
 
         subscription = SubscriptionForCourse.objects.filter(owner=user, course=course)
 
         if subscription.exists():
             subscription.delete()
-            message = 'Подписка удалена'
+            message = "Подписка удалена"
         else:
             SubscriptionForCourse.objects.create(owner=user, course=course)
-            message = 'Подписка добавлена'
+            message = "Подписка добавлена"
 
-        return Response({'message': message}, status=status.HTTP_200_OK)
+        return Response({"message": message}, status=status.HTTP_200_OK)
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
@@ -74,7 +75,7 @@ class LessonCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated, IsOwner]  # Только владельцы могут создавать
 
     def perform_create(self, serializer):
-        course_id = self.request.data.get('course')
+        course_id = self.request.data.get("course")
         try:
             course = Course.objects.get(pk=course_id)
             if course.owner != self.request.user:

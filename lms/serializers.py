@@ -10,7 +10,7 @@ class LessonSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
         validators = [
-            VideoUrlValidator(field='video_url'),
+            VideoUrlValidator(field="video_url"),
         ]
 
 
@@ -33,10 +33,10 @@ class CourseSerializer(serializers.ModelSerializer):
         return obj.lessons.count()
 
     def get_count_subscriptions(self, obj):
-        return f'Подписок: {obj.subscriptions.count()}'
+        return f"Подписок: {obj.subscriptions.count()}"
 
     def get_subscriptions(self, obj):
-        user = self.context['request'].user
+        user = self.context["request"].user
         if SubscriptionForCourse.objects.filter(owner=user, course=obj).exists():
-            return 'У вас есть подписка на данный курс.'
-        return 'У вас нет подписки на данный курс'
+            return "У вас есть подписка на данный курс."
+        return "У вас нет подписки на данный курс"

@@ -10,11 +10,11 @@ User = get_user_model()  # получает пользовательскую м�
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
-        fields = '__all__'
+        fields = "__all__"
 
     def validate(self, data):
         """Проверяем, что указан либо курс, либо урок"""
-        if not data.get('course') and not data.get('lesson'):
+        if not data.get("course") and not data.get("lesson"):
             raise serializers.ValidationError("Необходимо указать курс или урок")
         return data
 
@@ -24,7 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'phone', 'city', 'avatar', 'payments']
+        fields = ["id", "username", "email", "phone", "city", "avatar", "payments"]
 
 
 class RegisterSerializer(serializers.ModelSerializer):  # Сериализатор для создания новых пользователей.
@@ -32,7 +32,7 @@ class RegisterSerializer(serializers.ModelSerializer):  # Сериализато
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ["username", "email", "password"]
 
     def create(self, validated_data):
         """
@@ -40,8 +40,6 @@ class RegisterSerializer(serializers.ModelSerializer):  # Сериализато
         Возвращает созданного пользователя.
         """
         user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password']
+            username=validated_data["username"], email=validated_data["email"], password=validated_data["password"]
         )
         return user

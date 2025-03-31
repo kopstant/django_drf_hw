@@ -18,7 +18,7 @@ def create_stripe_price(product_id, amount):
     price = stripe.Price.create(
         product=product_id,
         unit_amount=amount * 100,
-        currency='rub',
+        currency="rub",
     )
     return price.id
 
@@ -26,15 +26,14 @@ def create_stripe_price(product_id, amount):
 def create_stripe_session(price_id):
     """Создание сессии оплаты в Stripe"""
     session = stripe.checkout.Session.create(
-        payment_method_types=['card'],
-        line_items=[{
-            'price': price_id,
-            'quantity': 1,
-        }],
-        mode='payment',
-        success_url='http://127.0.0.1:8000/',
+        payment_method_types=["card"],
+        line_items=[
+            {
+                "price": price_id,
+                "quantity": 1,
+            }
+        ],
+        mode="payment",
+        success_url="http://127.0.0.1:8000/",
     )
-    return {
-        'session_id': session.id,
-        'payment_link': session.url
-    }
+    return {"session_id": session.id, "payment_link": session.url}

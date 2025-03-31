@@ -8,18 +8,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0003_alter_payment_options_payment_link_and_more'),
+        ("users", "0003_alter_payment_options_payment_link_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='payment',
-            name='status',
-            field=models.CharField(choices=[('pending', 'Ожидает'), ('paid', 'Оплачено')], default='pending', max_length=20),
+            model_name="payment",
+            name="status",
+            field=models.CharField(choices=[("pending", "Ожидает"), ("paid", "Оплачено")], default="pending", max_length=20),
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='user',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Пользователь'),
+            model_name="payment",
+            name="user",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="Пользователь",
+            ),
         ),
     ]

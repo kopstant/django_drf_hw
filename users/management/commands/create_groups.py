@@ -3,11 +3,11 @@ from django.contrib.auth.models import Group
 
 
 class Command(BaseCommand):
-    help = 'Create default groups and permissions'
+    help = "Create default groups and permissions"
 
     def handle(self, *args, **kwargs):
-        moderator_group, created = Group.objects.get_or_create(name='moderator')
+        moderator_group, created = Group.objects.get_or_create(name="moderator")
         if created:
-            self.stdout.write(self.style.SUCCESS('Moderator group created'))
+            self.stdout.write(self.style.SUCCESS("Moderator group created"))
         else:
-            self.stdout.write(self.style.WARNING('Moderator group already exists'))
+            self.stdout.write(self.style.WARNING("Moderator group already exists"))
