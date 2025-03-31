@@ -3,10 +3,13 @@ version: '3.8'
 services:
   web:
     build: .
-    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    command: >
+      sh -c "python manage.py collectstatic --noinput &&
+             gunicorn config.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - .:/lms
-      - static_volume:/lms/static
+      - static_volume:/lms/staticfiles
+      - media_volume:/lms/media
     ports:
       - "8000:8000"
     env_file:
@@ -32,7 +35,8 @@ services:
     command: celery -A config worker -l INFO
     volumes:
       - .:/lms
-      - static_volume:/lms/static
+      - static_volume:/lms/staticfiles
+      - media_volume:/lms/media
     env_file:
       - .env
     depends_on:
@@ -44,7 +48,8 @@ services:
     command: celery -A config beat -l INFO
     volumes:
       - .:/lms
-      - static_volume:/lms/static
+      - static_volume:/lms/staticfiles
+      - media_volume:/lms/media
     env_file:
       - .env
     depends_on:
@@ -54,3 +59,4 @@ services:
 volumes:
   postgres_data:
   static_volume:
+  media_volume:
