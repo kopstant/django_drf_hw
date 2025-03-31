@@ -25,5 +25,5 @@ RUN mkdir -p /app/media
 # Открываем порт для веб-сервера
 EXPOSE 8000
 
-# Запускаем сервер Django
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Запускаем Gunicorn
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
