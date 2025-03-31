@@ -73,8 +73,7 @@ jobs:
         ALLOWED_HOSTS=localhost,127.0.0.1
         REDIS_HOST=redis
         REDIS_PORT=6379
-        STRIPE_PUBLIC_KEY=${{ secrets.STRIPE_PUBLIC_KEY }}
-        STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
+        STRIPE_API_KEY=${{ secrets.STRIPE_API_KEY }}
         EOL
 
     - name: Build and start containers
@@ -109,6 +108,8 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        debug: true
         script: |
           cd /var/www/django_drf_hw
           git pull origin main
