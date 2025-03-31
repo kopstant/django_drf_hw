@@ -57,6 +57,9 @@ jobs:
       run: |
         poetry run isort . --check-only
 
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
     - name: Build and start containers
       run: |
         docker-compose build
