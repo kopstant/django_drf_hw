@@ -66,7 +66,7 @@ jobs:
         POSTGRES_DB=django_drf_hw
         POSTGRES_USER=postgres
         POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }}
-        POSTGRES_HOST=db
+        POSTGRES_HOST=localhost
         POSTGRES_PORT=5432
         SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
         DEBUG=True
