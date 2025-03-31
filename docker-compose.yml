@@ -6,9 +6,7 @@ services:
     command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - .:/lms
-      - static_volume:/lms/staticfiles
-      - static_files:/lms/static
-      - media_volume:/lms/media
+      - static_volume:/lms/static
     ports:
       - "8000:8000"
     env_file:
@@ -18,7 +16,7 @@ services:
       - redis
 
   db:
-    image: postgres:16
+    image: postgres:15
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
@@ -34,9 +32,7 @@ services:
     command: celery -A config worker -l INFO
     volumes:
       - .:/lms
-      - static_volume:/lms/staticfiles
-      - static_files:/lms/static
-      - media_volume:/lms/media
+      - static_volume:/lms/static
     env_file:
       - .env
     depends_on:
@@ -48,9 +44,7 @@ services:
     command: celery -A config beat -l INFO
     volumes:
       - .:/lms
-      - static_volume:/lms/staticfiles
-      - static_files:/lms/static
-      - media_volume:/lms/media
+      - static_volume:/lms/static
     env_file:
       - .env
     depends_on:
@@ -60,5 +54,3 @@ services:
 volumes:
   postgres_data:
   static_volume:
-  static_files:
-  media_volume:
